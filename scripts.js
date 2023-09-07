@@ -1,15 +1,18 @@
 const GRIDSIDE = 600;
-let squaresPerSide = 16;
-
 
 const sketchArea = document.querySelector("#sketch-area");
-sketchArea.style.width = sketchArea.style.height =`${GRIDSIDE}px`;
+const sliderContainer = document.querySelector("#slider-container");
+const slider = document.querySelector("#slider");
+const sliderValue = document.querySelector("#slider-value");
+sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
+
+sketchArea.style.width = sketchArea.style.height = sliderContainer.style.width = `${GRIDSIDE}px`;
 
 function setCellBackgroundColor() {
     this.style.backgroundColor = "black";
 }
 
-function createGridCells() {
+function createGridCells(squaresPerSide) {
     const numOfSquares = (squaresPerSide * squaresPerSide);
     const widthOrHeight = `${(GRIDSIDE / squaresPerSide) - 2}px`;
 
@@ -25,5 +28,17 @@ function createGridCells() {
     }
 }
 
+function removeGridCells() {
+    while (sketchArea.firstChild) {
+        sketchArea.removeChild(sketchArea.firstChild);
+    }
+}
 
-createGridCells();
+slider.oninput = function() {
+    let txt = `${this.value} x ${this.value} (Resolution)`;
+    sliderValue.innerHTML = txt;
+    removeGridCells();
+    createGridCells(this.value);
+}
+
+createGridCells(16);
