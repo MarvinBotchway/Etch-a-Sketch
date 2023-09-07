@@ -1,22 +1,22 @@
 const GRIDSIDE = 600;
-let rows = 16;
-let cols = 16;
+let squaresPerSide = 16;
 
 
 const sketchArea = document.querySelector("#sketch-area");
-sketchArea.style.width =`${GRIDSIDE}px`;
-sketchArea.style.height =`${GRIDSIDE}px`;
+sketchArea.style.width = sketchArea.style.height =`${GRIDSIDE}px`;
 
 function setCellBackgroundColor() {
     this.style.backgroundColor = "black";
 }
 
 function createGridCells() {
-    for(let i = 0; i < (rows * cols); i++) {
+    const numOfSquares = (squaresPerSide * squaresPerSide);
+    const widthOrHeight = `${(GRIDSIDE / squaresPerSide) - 2}px`;
+
+    for(let i = 0; i < numOfSquares; i++) {
         const gridCell = document.createElement("div");
         
-        gridCell.style.width = `${(GRIDSIDE / cols) - 2}px`;
-        gridCell.style.height = `${(GRIDSIDE / rows) - 2}px`;
+        gridCell.style.width = gridCell.style.height = widthOrHeight;
         gridCell.classList.add("cell");
 
         sketchArea.appendChild(gridCell);
