@@ -7,7 +7,7 @@ const sketchArea = document.querySelector("#sketch-area");
 sketchArea.style.width =`${GRIDSIDE}px`;
 sketchArea.style.height =`${GRIDSIDE}px`;
 
-function chageBackgroundColor() {
+function setCellBackgroundColor() {
     this.style.backgroundColor = "black";
 }
 
@@ -21,7 +21,7 @@ function createGridCells() {
 
         sketchArea.appendChild(gridCell);
         
-        gridCell.addEventListener("mouseover", chageBackgroundColor);
+        gridCell.addEventListener("mouseover", setCellBackgroundColor);
     }
 }
 
