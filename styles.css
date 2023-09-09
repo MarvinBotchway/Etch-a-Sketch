@@ -1,3 +1,8 @@
+:root {
+    --grid-width: 600px;
+    --accent-color: #04AA6D;
+    --inactive-color: rgba(0, 0, 0, 0.25);
+}
 * {
     margin: 0;
     padding: 0;
@@ -6,20 +11,29 @@ body {
     background-color: aliceblue;
 }
 
+.container {
+    margin: 0 auto;
+    width: var(--grid-width);
+}
+
+.top {
+    display: flex;
+    padding: 3px;
+    margin-top: 100px;
+    background-color: white;
+    color: var(--inactive-color);
+    width: fit-content;
+    margin-bottom: 6px;
+}
+
+#grid-toggle {
+    cursor: pointer;
+}
 #sketch-area {
     display: flex;
     flex-wrap: wrap;
-    margin: 100px auto 0 auto;
-    background-color: white;
-}
-
-.cell {
-    border: 1px solid whitesmoke;
-}
-
-
-#slider-container {
     margin: 0 auto;
+    background-color: white;
 }
   
 .slider {
@@ -47,13 +61,13 @@ body {
     appearance: none;
     width: 25px;
     height: 25px;
-    background: #04AA6D;
+    background: var(--accent-color);
     cursor: pointer;
 }
   
 .slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
-    background: #04AA6D;
+    background: var(--accent-color);
     cursor: pointer;
 }
