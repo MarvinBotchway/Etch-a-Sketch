@@ -2,7 +2,6 @@ const gridWidth = getComputedStyle(document.body).getPropertyValue("--grid-width
 const accentColor = getComputedStyle(document.body).getPropertyValue("--accent-color");
 const inactiveColor = getComputedStyle(document.body).getPropertyValue("--inactive-color");
 
-const container = document.querySelector(".container");
 const sketchArea = document.querySelector("#sketch-area");
 const slider = document.querySelector("#slider");
 const sliderValue = document.querySelector("#slider-value");
@@ -14,15 +13,15 @@ let gridVisible = false;
 function toggleGrid() {
     gridVisible = gridVisible ? false : true;
     gridToggle.style.color = gridVisible ? accentColor : inactiveColor;
-    removeGridCells();
-    createGridCells();    
+    removeGridSquares();
+    createGridSquares();    
 }
 
-function setCellBackgroundColor() {
+function setSquareBackgroundColor() {
     this.style.backgroundColor = "black";
 }
 
-function createGridCells() {
+function createGridSquares() {
     const numOfSquares = (squaresPerSide * squaresPerSide);
     let widthOrHeight = 0;
 
@@ -38,13 +37,13 @@ function createGridCells() {
             gridCell.style.border = "none";
         }
         gridCell.style.width = gridCell.style.height = widthOrHeight;
-        gridCell.addEventListener("mouseover", setCellBackgroundColor);
+        gridCell.addEventListener("mouseover", setSquareBackgroundColor);
         
         sketchArea.appendChild(gridCell);
     }
 }
 
-function removeGridCells() {
+function removeGridSquares() {
     while (sketchArea.firstChild) {
         sketchArea.removeChild(sketchArea.firstChild);
     }
@@ -53,11 +52,11 @@ function removeGridCells() {
 slider.oninput = function() {
     squaresPerSide = this.value;
     sliderValue.textContent = `${this.value} x ${this.value} (Resolution)`;
-    removeGridCells();
-    createGridCells();
+    removeGridSquares();
+    createGridSquares();
 }
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
 gridToggle.addEventListener("click", toggleGrid);
 
-createGridCells();
+createGridSquares();
