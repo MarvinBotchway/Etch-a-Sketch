@@ -51,6 +51,10 @@ function createGridSquares() {
         gridCell.addEventListener("mouseover", (e) => setSquareBackgroundColor(e));
         gridCell.addEventListener("mouseup", (e) => setSquareBackgroundColor(e));
         
+        gridCell.addEventListener("dragstart", (e) => {
+            e.preventDefault();
+        });
+        
         sketchArea.appendChild(gridCell);
     }
 }
