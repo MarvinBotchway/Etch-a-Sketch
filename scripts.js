@@ -10,6 +10,8 @@ const gridToggle = document.querySelector("#grid-toggle");
 let squaresPerSide = 16;
 let gridVisible = false;
 
+let isDrawing = false
+
 function toggleGrid() {
     gridVisible = gridVisible ? false : true;
     gridToggle.style.color = gridVisible ? accentColor : inactiveColor;
@@ -17,8 +19,15 @@ function toggleGrid() {
     createGridSquares();    
 }
 
-function setSquareBackgroundColor() {
-    this.style.backgroundColor = "black";
+function setSquareBackgroundColor(e) {
+    if (e.type === "mousedown") {
+        isDrawing = true;
+        e.target.style.backgroundColor = "black";
+    }
+    else if (e.type === "mouseover" && isDrawing) {
+        e.target.style.backgroundColor = "black";
+    }
+    else isDrawing = false;
 }
 
 function createGridSquares() {
@@ -37,7 +46,10 @@ function createGridSquares() {
             gridCell.style.border = "none";
         }
         gridCell.style.width = gridCell.style.height = widthOrHeight;
-        gridCell.addEventListener("mouseover", setSquareBackgroundColor);
+
+        gridCell.addEventListener("mousedown", (e) => setSquareBackgroundColor(e));
+        gridCell.addEventListener("mouseover", (e) => setSquareBackgroundColor(e));
+        gridCell.addEventListener("mouseup", (e) => setSquareBackgroundColor(e));
         
         sketchArea.appendChild(gridCell);
     }
