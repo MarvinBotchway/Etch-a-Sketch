@@ -15,8 +15,21 @@ let isDrawing = false
 function toggleGrid() {
     gridVisible = gridVisible ? false : true;
     gridToggle.style.color = gridVisible ? accentColor : inactiveColor;
-    removeGridSquares();
-    createGridSquares();    
+    if (gridVisible) {
+        widthOrHeight = `${(parseInt(gridWidth) / squaresPerSide) - 2}px`
+        sketchArea.childNodes.forEach(square => {square.style.border = "1px solid whitesmoke"});
+    }
+    else if (!gridVisible) {
+        widthOrHeight = `${(parseInt(gridWidth) / squaresPerSide)}px`
+        sketchArea.childNodes.forEach(square => {square.style.border = "none"});
+
+    }
+    sketchArea.childNodes.forEach(square => {
+        square.style.width = square.style.height = widthOrHeight
+    });
+   
+
+
 }
 
 function setSquareBackgroundColor(e) {
