@@ -8,39 +8,34 @@ const sliderValue = document.querySelector("#slider-value");
 const gridToggle = document.querySelector("#grid-toggle");
 
 let squaresPerSide = 16;
-let gridVisible = false;
+let gridLinesVisible = false;
+let isSketching = false
 
-let isDrawing = false
-
-function toggleGrid() {
-    gridVisible = gridVisible ? false : true;
-    gridToggle.style.color = gridVisible ? accentColor : inactiveColor;
-    if (gridVisible) {
+function toggleGridLinesVisibility() {
+    gridLinesVisible = gridLinesVisible ? false : true;
+    gridToggle.style.color = gridLinesVisible ? accentColor : inactiveColor;
+    if (gridLinesVisible) {
         widthOrHeight = `${(parseInt(gridWidth) / squaresPerSide) - 2}px`
         sketchArea.childNodes.forEach(square => {square.style.border = "1px solid whitesmoke"});
     }
-    else if (!gridVisible) {
+    else if (!gridLinesVisible) {
         widthOrHeight = `${(parseInt(gridWidth) / squaresPerSide)}px`
         sketchArea.childNodes.forEach(square => {square.style.border = "none"});
-
     }
     sketchArea.childNodes.forEach(square => {
         square.style.width = square.style.height = widthOrHeight
     });
-   
-
-
 }
 
 function setSquareBackgroundColor(e) {
     if (e.type === "mousedown") {
-        isDrawing = true;
+        isSketching = true;
         e.target.style.backgroundColor = "black";
     }
-    else if (e.type === "mouseover" && isDrawing) {
+    else if (e.type === "mouseover" && isSketching) {
         e.target.style.backgroundColor = "black";
     }
-    else isDrawing = false;
+    else isSketching = false;
 }
 
 function createGridSquares() {
@@ -48,27 +43,27 @@ function createGridSquares() {
     let widthOrHeight = 0;
 
     for(let i = 0; i < numOfSquares; i++) {
-        const gridCell = document.createElement("div");
+        const gridSquare = document.createElement("div");
         
-        if (gridVisible) {
+        if (gridLinesVisible) {
             widthOrHeight = `${(parseInt(gridWidth) / squaresPerSide) - 2}px`
-            gridCell.style.border = "1px solid whitesmoke";
+            gridSquare.style.border = "1px solid whitesmoke";
         }
-        else if (!gridVisible) {
+        else if (!gridLinesVisible) {
             widthOrHeight = `${(parseInt(gridWidth) / squaresPerSide)}px`
-            gridCell.style.border = "none";
+            gridSquare.style.border = "none";
         }
-        gridCell.style.width = gridCell.style.height = widthOrHeight;
+        gridSquare.style.width = gridSquare.style.height = widthOrHeight;
 
-        gridCell.addEventListener("mousedown", (e) => setSquareBackgroundColor(e));
-        gridCell.addEventListener("mouseover", (e) => setSquareBackgroundColor(e));
-        gridCell.addEventListener("mouseup", (e) => setSquareBackgroundColor(e));
+        gridSquare.addEventListener("mousedown", (e) => setSquareBackgroundColor(e));
+        gridSquare.addEventListener("mouseover", (e) => setSquareBackgroundColor(e));
+        gridSquare.addEventListener("mouseup", (e) => setSquareBackgroundColor(e));
         
-        gridCell.addEventListener("dragstart", (e) => {
+        gridSquare.addEventListener("dragstart", (e) => {
             e.preventDefault();
         });
         
-        sketchArea.appendChild(gridCell);
+        sketchArea.appendChild(gridSquare);
     }
 }
 
@@ -86,6 +81,6 @@ slider.oninput = function() {
 }
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
-gridToggle.addEventListener("click", toggleGrid);
+gridToggle.addEventListener("click", toggleGridLinesVisibility);
 
 createGridSquares();
