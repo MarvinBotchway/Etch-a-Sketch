@@ -28,6 +28,7 @@ body {
 
 #grid-toggle {
     cursor: pointer;
+    padding: 3px;
 }
 #sketch-area {
     display: flex;

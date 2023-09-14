@@ -6,10 +6,12 @@ const sketchArea = document.querySelector("#sketch-area");
 const slider = document.querySelector("#slider");
 const sliderValue = document.querySelector("#slider-value");
 const gridToggle = document.querySelector("#grid-toggle");
+const penColorPicker = document.querySelector("#pen-color");
 
 let squaresPerSide = 16;
 let gridLinesVisible = false;
-let isSketching = false
+let isSketching = false;
+let penColor = "#000000";
 
 function toggleGridLinesVisibility() {
     gridLinesVisible = gridLinesVisible ? false : true;
@@ -30,10 +32,10 @@ function toggleGridLinesVisibility() {
 function setSquareBackgroundColor(e) {
     if (e.type === "mousedown") {
         isSketching = true;
-        e.target.style.backgroundColor = "black";
+        e.target.style.backgroundColor = penColor;
     }
     else if (e.type === "mouseover" && isSketching) {
-        e.target.style.backgroundColor = "black";
+        e.target.style.backgroundColor = penColor;
     }
     else isSketching = false;
 }
@@ -79,6 +81,10 @@ slider.oninput = function() {
     removeGridSquares();
     createGridSquares();
 }
+
+penColorPicker.addEventListener("input", (e) => {
+    penColor = e.target.value;
+})
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
 gridToggle.addEventListener("click", toggleGridLinesVisibility);
