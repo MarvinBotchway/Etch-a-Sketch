@@ -7,10 +7,12 @@ const slider = document.querySelector("#slider");
 const sliderValue = document.querySelector("#slider-value");
 const gridToggle = document.querySelector("#grid-toggle");
 const penColorPicker = document.querySelector("#pen-color");
+const rainbowToggle = document.querySelector("#rainbow");
 
 let squaresPerSide = 16;
 let gridLinesVisible = false;
 let isSketching = false;
+let isRainbow = false;
 let penColor = "#000000";
 
 function toggleGridLinesVisibility() {
@@ -30,6 +32,7 @@ function toggleGridLinesVisibility() {
 }
 
 function setSquareBackgroundColor(e) {
+    if (isRainbow) penColor = createRandomColor();
     if (e.type === "mousedown") {
         isSketching = true;
         e.target.style.backgroundColor = penColor;
@@ -85,6 +88,24 @@ slider.oninput = function() {
 penColorPicker.addEventListener("input", (e) => {
     penColor = e.target.value;
 })
+
+function toggleRainbow() {
+    isRainbow = isRainbow ? false : true;
+    rainbowToggle.style.color = isRainbow ? accentColor : inactiveColor;
+    penColor = !isRainbow ? "#000000" : penColor; 
+}
+
+function createRandomColor() {
+    let newColor = "#";
+    let possibleChars = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+    for (let i = 0; i < 6; i++){
+        randomIndex = Math.floor(Math.random() * (possibleChars.length + 1));
+        newColor += possibleChars[randomIndex];
+    }
+    return newColor;
+}
+
+rainbowToggle.addEventListener("click", toggleRainbow);
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
 gridToggle.addEventListener("click", toggleGridLinesVisibility);
