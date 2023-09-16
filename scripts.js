@@ -9,12 +9,15 @@ const gridToggle = document.querySelector("#grid-toggle");
 const penColorPicker = document.querySelector("#pen-color");
 const rainbowToggle = document.querySelector("#rainbow");
 const shadingToggle = document.querySelector("#gradient");
+const eraserToggle = document.querySelector("#eraser");
+const clearIcon = document.querySelector("#clear");
 
 let squaresPerSide = 16;
 let gridLinesVisible = false;
 let isSketching = false;
 let isRainbow = false;
 let shade = false;
+let eraseOn = false;
 let squarePainted = false;
 let penColor = "#000000";
 let shadeAmountHex = "00";
@@ -161,8 +164,19 @@ function convertRGBAToHexA(rgba, forceRemoveAlpha = false) {
       .join("") // Puts the array to togehter to create a string
 }
 
+function toggleEraser() {
+    eraseOn = eraseOn ? false : true;
+    eraserToggle.style.color = eraseOn ? accentColor : inactiveColor;
+    penColor = eraseOn ? "" : penColor;
+}
+
 shadingToggle.addEventListener("click", toggleShading);
 rainbowToggle.addEventListener("click", toggleRainbow);
+eraserToggle.addEventListener("click", toggleEraser);
+clearIcon.addEventListener("click", () => {
+    removeGridSquares();
+    createGridSquares();
+});
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
 gridToggle.addEventListener("click", toggleGridLinesVisibility);
