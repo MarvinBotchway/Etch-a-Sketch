@@ -15,7 +15,7 @@ let gridLinesVisible = false;
 let isSketching = false;
 let isRainbow = false;
 let shade = false;
-let shadePercentage = 0;
+let squarePainted = false;
 let penColor = "#000000";
 let shadeAmountHex = "00";
 
@@ -36,18 +36,41 @@ function toggleGridLinesVisibility() {
 }
 
 function setSquareBackgroundColor(e) {
+    let currentShade = "0";
+    let color = "";
     if (isRainbow) penColor = createRandomColor();
-    if (shade) penColor = penColor.substring(0, 7) + createShading();
-
+    
     if (e.type === "mousedown") {
         isSketching = true;
+        // By default e.target.style.background = ""
+        if (shade) {
+            if (e.target.style.backgroundColor != "") {
+                // e.target.style.backgroundColor returns an rgba string
+                // it needs to be converted and broken into penColor and shadingPercentage(opacity)
+                // eg. "rgba(0, 0, 0, 0.7)"
+                penColor = convertRGBAToHexA(e.target.style.backgroundColor);
+                color =  e.target.style.backgroundColor;
+                currentShade = color.substring((color.length - 4), (color.length - 1));
+                penColor = penColor.substring(0, 7) + createShading(currentShade);
+            }
+            else penColor = penColor.substring(0, 7) + "1A";
+            
+        }
         e.target.style.backgroundColor = penColor;
     }
     else if (e.type === "mouseover" && isSketching) {
+        if (shade) {
+            if (e.target.style.backgroundColor != "") {
+                penColor = convertRGBAToHexA(e.target.style.backgroundColor);
+                color =  e.target.style.backgroundColor;
+                currentShade = color.substring((color.length - 4), (color.length - 1));
+                penColor = penColor.substring(0, 7) + createShading(currentShade);
+            }
+            else penColor = penColor.substring(0, 7) + "1A";       
+        }   
         e.target.style.backgroundColor = penColor;
     }
     else isSketching = false;
-
 }
 
 function createGridSquares() {
@@ -118,14 +141,24 @@ function toggleShading() {
     penColor = !shade ? "#000000" : penColor;
 }
 
-function createShading() {
-
+function createShading(currentShade) {
+    let shadePercentage = currentShade * 100;
     if (shadePercentage < 100) shadePercentage += 10;
-    else shadePercentage = 0;
 
     shadeAmountHex = (Math.round((shadePercentage / 100) * 255)).toString(16);
     console.log(`${shadePercentage}% = ${shadeAmountHex}`);
     return (shadeAmountHex);
+}
+
+function convertRGBAToHexA(rgba, forceRemoveAlpha = false) {
+    return "#" + rgba.replace(/^rgba?\(|\s+|\)$/g, '') // Get's rgba / rgb string values
+      .split(',') // splits them at ","
+      .filter((string, index) => !forceRemoveAlpha || index !== 3)
+      .map(string => parseFloat(string)) // Converts to numbers
+      .map((number, index) => index === 3 ? Math.round(number * 255) : number) // Converts alpha to 255 number
+      .map(number => number.toString(16)) // Converts numbers to hex
+      .map(string => string.length === 1 ? "0" + string : string) // Adds 0 when length of one number is 1
+      .join("") // Puts the array to togehter to create a string
 }
 
 shadingToggle.addEventListener("click", toggleShading);
