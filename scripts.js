@@ -120,10 +120,16 @@ slider.oninput = function() {
 
 penColorPicker.addEventListener("input", (e) => {
     penColor = e.target.value;
+    if (shade) toggleShading();
+    if (isRainbow) toggleRainbow();
+    if (eraseOn) toggleEraser();
 })
 
 function toggleRainbow() {
     isRainbow = isRainbow ? false : true;
+    if (isRainbow){
+        if (eraseOn) toggleEraser();
+    }
     rainbowToggle.style.color = isRainbow ? accentColor : inactiveColor;
     penColor = !isRainbow ? "#000000" : penColor; 
 }
@@ -140,6 +146,9 @@ function createRandomColor() {
 
 function toggleShading() {
     shade = shade ? false : true;
+    if (shade) {
+        if (eraseOn) toggleEraser();
+    }
     shadingToggle.style.color = shade ? accentColor : inactiveColor;
     penColor = !shade ? "#000000" : penColor;
 }
@@ -166,6 +175,10 @@ function convertRGBAToHexA(rgba, forceRemoveAlpha = false) {
 
 function toggleEraser() {
     eraseOn = eraseOn ? false : true;
+    if (eraseOn) {
+        if (isRainbow) toggleRainbow();
+        if (shade) toggleShading();
+    }
     eraserToggle.style.color = eraseOn ? accentColor : inactiveColor;
     penColor = eraseOn ? "" : penColor;
 }
