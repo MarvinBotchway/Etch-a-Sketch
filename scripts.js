@@ -8,12 +8,16 @@ const sliderValue = document.querySelector("#slider-value");
 const gridToggle = document.querySelector("#grid-toggle");
 const penColorPicker = document.querySelector("#pen-color");
 const rainbowToggle = document.querySelector("#rainbow");
+const shadingToggle = document.querySelector("#gradient");
 
 let squaresPerSide = 16;
 let gridLinesVisible = false;
 let isSketching = false;
 let isRainbow = false;
+let shade = false;
+let shadePercentage = 0;
 let penColor = "#000000";
+let shadeAmountHex = "00";
 
 function toggleGridLinesVisibility() {
     gridLinesVisible = gridLinesVisible ? false : true;
@@ -33,6 +37,8 @@ function toggleGridLinesVisibility() {
 
 function setSquareBackgroundColor(e) {
     if (isRainbow) penColor = createRandomColor();
+    if (shade) penColor = penColor.substring(0, 7) + createShading();
+
     if (e.type === "mousedown") {
         isSketching = true;
         e.target.style.backgroundColor = penColor;
@@ -41,6 +47,7 @@ function setSquareBackgroundColor(e) {
         e.target.style.backgroundColor = penColor;
     }
     else isSketching = false;
+
 }
 
 function createGridSquares() {
@@ -105,6 +112,23 @@ function createRandomColor() {
     return newColor;
 }
 
+function toggleShading() {
+    shade = shade ? false : true;
+    shadingToggle.style.color = shade ? accentColor : inactiveColor;
+    penColor = !shade ? "#000000" : penColor;
+}
+
+function createShading() {
+
+    if (shadePercentage < 100) shadePercentage += 10;
+    else shadePercentage = 0;
+
+    shadeAmountHex = (Math.round((shadePercentage / 100) * 255)).toString(16);
+    console.log(`${shadePercentage}% = ${shadeAmountHex}`);
+    return (shadeAmountHex);
+}
+
+shadingToggle.addEventListener("click", toggleShading);
 rainbowToggle.addEventListener("click", toggleRainbow);
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
