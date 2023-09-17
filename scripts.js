@@ -20,6 +20,7 @@ let shade = false;
 let eraseOn = false;
 let squarePainted = false;
 let penColor = "#000000";
+let colorPickerColor = "#000000";
 let shadeAmountHex = "00";
 
 function toggleGridLinesVisibility() {
@@ -119,7 +120,7 @@ slider.oninput = function() {
 }
 
 penColorPicker.addEventListener("input", (e) => {
-    penColor = e.target.value;
+    penColor = colorPickerColor = e.target.value;
     if (shade) toggleShading();
     if (isRainbow) toggleRainbow();
     if (eraseOn) toggleEraser();
@@ -131,7 +132,7 @@ function toggleRainbow() {
         if (eraseOn) toggleEraser();
     }
     rainbowToggle.style.color = isRainbow ? accentColor : inactiveColor;
-    penColor = !isRainbow ? "#000000" : penColor; 
+    penColor = !isRainbow ? colorPickerColor : penColor; 
 }
 
 function createRandomColor() {
@@ -150,7 +151,7 @@ function toggleShading() {
         if (eraseOn) toggleEraser();
     }
     shadingToggle.style.color = shade ? accentColor : inactiveColor;
-    penColor = !shade ? "#000000" : penColor;
+    penColor = !shade ? colorPickerColor : penColor;
 }
 
 function createShading(currentShade) {
@@ -180,7 +181,7 @@ function toggleEraser() {
         if (shade) toggleShading();
     }
     eraserToggle.style.color = eraseOn ? accentColor : inactiveColor;
-    penColor = eraseOn ? "" : penColor;
+    penColor = eraseOn ? "" : colorPickerColor;
 }
 
 shadingToggle.addEventListener("click", toggleShading);
