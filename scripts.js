@@ -184,13 +184,22 @@ function toggleEraser() {
     penColor = eraseOn ? "" : colorPickerColor;
 }
 
+function confirmClear(){
+    if (confirm("Your sketch wound deleted!")) {
+        clearSketch();
+    }
+}
+
+function clearSketch() {
+    removeGridSquares();
+    createGridSquares();
+
+}
+
 shadingToggle.addEventListener("click", toggleShading);
 rainbowToggle.addEventListener("click", toggleRainbow);
 eraserToggle.addEventListener("click", toggleEraser);
-clearIcon.addEventListener("click", () => {
-    removeGridSquares();
-    createGridSquares();
-});
+clearIcon.addEventListener("click", confirmClear);
 
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
 gridToggle.addEventListener("click", toggleGridLinesVisibility);
