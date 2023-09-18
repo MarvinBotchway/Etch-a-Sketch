@@ -170,7 +170,7 @@ function clearSketch() {
 }
 
 function confirmClear(){
-    if (confirm("Your Sketch Wound Cleared!")) clearSketch();
+    if (confirm("Your Sketch Wound Be Deleted!")) clearSketch();
 }
 
 function convertRGBAToHexA(rgba, forceRemoveAlpha = false) {
