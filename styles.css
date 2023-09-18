@@ -9,6 +9,7 @@
 }
 body {
     background-color: aliceblue;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .container {
@@ -26,17 +27,26 @@ body {
     margin-bottom: 6px;
 }
 
-.sub-top {
+.button-cat {
+    font-size: small;
+    color: rgba(0, 0, 0, 0.473);
+}
+
+.top-button {
     display: flex;
     align-items: center;
     background-color: white;
-    padding: 3px;
+    padding: 6px;
     margin-right: 9px;
 }
 
-#grid-toggle, #gradient, #rainbow, #eraser, #clear, #select-color {
+#grid-toggle, #gradient, #rainbow, #eraser, #clear, #pen-color {
     cursor: pointer;
-    padding: 0 3px;
+    margin-right: 3px;
+}
+
+#pen-color {
+    border: none;
 }
 
 #sketch-area {
