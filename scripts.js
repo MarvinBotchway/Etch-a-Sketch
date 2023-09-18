@@ -7,18 +7,20 @@ const slider = document.querySelector("#slider");
 const sliderValue = document.querySelector("#slider-value");
 const gridToggle = document.querySelector("#grid-toggle");
 const penColorPicker = document.querySelector("#pen-color");
-const rainbowToggle = document.querySelector("#rainbow");
+const radonColorToggle = document.querySelector("#rainbow");
 const shadingToggle = document.querySelector("#gradient");
 const eraserToggle = document.querySelector("#eraser");
-const clearIcon = document.querySelector("#clear");
+const clearSketchButton = document.querySelector("#clear");
 
 let squaresPerSide = 16;
+
 let gridLinesVisible = false;
-let isSketching = false;
-let isRainbow = false;
-let shade = false;
-let eraseOn = false;
+let sketching = false;
+let randomizingColors = false;
+let shading = false;
+let erasing = false;
 let squarePainted = false;
+
 let penColor = "#000000";
 let colorPickerColor = "#000000";
 let shadeAmountHex = "00";
@@ -42,12 +44,12 @@ function toggleGridLinesVisibility() {
 function setSquareBackgroundColor(e) {
     let currentShade = "0";
     let color = "";
-    if (isRainbow) penColor = createRandomColor();
     
     if (e.type === "mousedown") {
-        isSketching = true;
+        sketching = true;
+        if (randomizingColors) penColor = createRandomColor();
         // By default e.target.style.background = ""
-        if (shade) {
+        if (shading) {
             if (e.target.style.backgroundColor != "") {
                 // e.target.style.backgroundColor returns an rgba string
                 // it needs to be converted and broken into penColor and shadingPercentage(opacity)
@@ -62,8 +64,9 @@ function setSquareBackgroundColor(e) {
         }
         e.target.style.backgroundColor = penColor;
     }
-    else if (e.type === "mouseover" && isSketching) {
-        if (shade) {
+    else if (e.type === "mouseover" && sketching) {
+        if (randomizingColors) penColor = createRandomColor();
+        if (shading) {
             if (e.target.style.backgroundColor != "") {
                 penColor = convertRGBAToHexA(e.target.style.backgroundColor);
                 color =  e.target.style.backgroundColor;
@@ -74,7 +77,7 @@ function setSquareBackgroundColor(e) {
         }   
         e.target.style.backgroundColor = penColor;
     }
-    else isSketching = false;
+    else sketching = false;
 }
 
 function createGridSquares() {
@@ -112,27 +115,18 @@ function removeGridSquares() {
     }
 }
 
-slider.oninput = function() {
-    squaresPerSide = this.value;
-    sliderValue.textContent = `${this.value} x ${this.value} (Resolution)`;
-    removeGridSquares();
-    createGridSquares();
-}
-
 penColorPicker.addEventListener("input", (e) => {
     penColor = colorPickerColor = e.target.value;
-    if (shade) toggleShading();
-    if (isRainbow) toggleRainbow();
-    if (eraseOn) toggleEraser();
+    if (shading) toggleShading();
+    if (randomizingColors) toggleUseOfRandomColors();
+    if (erasing) toggleEraser();
 })
 
-function toggleRainbow() {
-    isRainbow = isRainbow ? false : true;
-    if (isRainbow){
-        if (eraseOn) toggleEraser();
-    }
-    rainbowToggle.style.color = isRainbow ? accentColor : inactiveColor;
-    penColor = !isRainbow ? colorPickerColor : penColor; 
+function toggleUseOfRandomColors() {
+    randomizingColors = randomizingColors ? false : true;
+    if (randomizingColors && erasing) toggleEraser();
+    radonColorToggle.style.color = randomizingColors ? accentColor : inactiveColor;
+    penColor = !randomizingColors ? colorPickerColor : penColor; 
 }
 
 function createRandomColor() {
@@ -146,12 +140,10 @@ function createRandomColor() {
 }
 
 function toggleShading() {
-    shade = shade ? false : true;
-    if (shade) {
-        if (eraseOn) toggleEraser();
-    }
-    shadingToggle.style.color = shade ? accentColor : inactiveColor;
-    penColor = !shade ? colorPickerColor : penColor;
+    shading = shading ? false : true;
+    if (shading && erasing) toggleEraser();
+    shadingToggle.style.color = shading ? accentColor : inactiveColor;
+    penColor = !shading ? colorPickerColor : penColor;
 }
 
 function createShading(currentShade) {
@@ -159,8 +151,26 @@ function createShading(currentShade) {
     if (shadePercentage < 100) shadePercentage += 10;
 
     shadeAmountHex = (Math.round((shadePercentage / 100) * 255)).toString(16);
-    console.log(`${shadePercentage}% = ${shadeAmountHex}`);
     return (shadeAmountHex);
+}
+
+function toggleEraser() {
+    erasing = erasing ? false : true;
+    if (erasing) {
+        if (randomizingColors) toggleUseOfRandomColors();
+        if (shading) toggleShading();
+    }
+    eraserToggle.style.color = erasing ? accentColor : inactiveColor;
+    penColor = erasing ? "" : colorPickerColor;
+}
+
+function clearSketch() {
+    removeGridSquares();
+    createGridSquares();
+}
+
+function confirmClear(){
+    if (confirm("Your sketch wound deleted!")) clearSketch();
 }
 
 function convertRGBAToHexA(rgba, forceRemoveAlpha = false) {
@@ -174,34 +184,18 @@ function convertRGBAToHexA(rgba, forceRemoveAlpha = false) {
       .join("") // Puts the array to togehter to create a string
 }
 
-function toggleEraser() {
-    eraseOn = eraseOn ? false : true;
-    if (eraseOn) {
-        if (isRainbow) toggleRainbow();
-        if (shade) toggleShading();
-    }
-    eraserToggle.style.color = eraseOn ? accentColor : inactiveColor;
-    penColor = eraseOn ? "" : colorPickerColor;
-}
+shadingToggle.addEventListener("click", toggleShading);
+radonColorToggle.addEventListener("click", toggleUseOfRandomColors);
+eraserToggle.addEventListener("click", toggleEraser);
+gridToggle.addEventListener("click", toggleGridLinesVisibility);
+clearSketchButton.addEventListener("click", confirmClear);
 
-function confirmClear(){
-    if (confirm("Your sketch wound deleted!")) {
-        clearSketch();
-    }
-}
-
-function clearSketch() {
+slider.oninput = function() {
+    squaresPerSide = this.value;
+    sliderValue.textContent = `${this.value} x ${this.value} (Resolution)`;
     removeGridSquares();
     createGridSquares();
-
 }
-
-shadingToggle.addEventListener("click", toggleShading);
-rainbowToggle.addEventListener("click", toggleRainbow);
-eraserToggle.addEventListener("click", toggleEraser);
-clearIcon.addEventListener("click", confirmClear);
-
 sliderValue.textContent = `${slider.value} x ${slider.value} (Resolution)`;
-gridToggle.addEventListener("click", toggleGridLinesVisibility);
 
 createGridSquares();
