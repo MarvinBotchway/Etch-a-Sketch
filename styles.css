@@ -39,8 +39,11 @@ body {
     padding: 6px;
     margin-right: 9px;
 }
+.top-button:hover {
+    color: #04AA6D;
+}
 
-#grid-toggle, #gradient, #rainbow, #eraser, #clear, #pen-color {
+.top-button > span {
     cursor: pointer;
     margin-right: 3px;
 }
