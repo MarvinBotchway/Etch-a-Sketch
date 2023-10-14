@@ -9,5 +9,10 @@ This is a fun little project which puts together knowledge of HTML, CSS and Java
 [live demo](#)
 
 #### Features
-
-#### Instructions To Run Locally
+- Change the resolution of the sketch area.
+- Make grid lines visible or invisible.
+- Sketch with any color of your choice.
+- Sketch with random colors.
+- Erase sketch.
+- Use a shading effect.
+- Clear the whole sketch area.
